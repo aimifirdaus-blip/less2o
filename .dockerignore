@@ -1,0 +1,9 @@
+# Ignore common files that shouldn't be sent to the image context
+.git
+.gitignore
+.DS_Store
+node_modules/
+vendor/
+.env
+storage/
+ 
