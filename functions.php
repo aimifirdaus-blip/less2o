@@ -1,39 +1,29 @@
 <?php
 
-    if (session_status() === PHP_SESSION_NONE) {
+    if (session_status() == PHP_SESSION_NONE) {
     session_start();
     }
     //error_reporting(0);
     include("system/index.php");
     require_once 'detect.php';
 
-    function get_client_ip(){
-        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-
-            foreach ($ips as $ip) {
-                $ip = trim($ip);
-
-                if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                    return $ip; // first valid IP = real client on Render
-                }
-            }
+    function get_client_ip() {
+        $client  = @$_SERVER['HTTP_CLIENT_IP'];
+        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+        $remote  = $_SERVER['REMOTE_ADDR'];
+        if(filter_var($client, FILTER_VALIDATE_IP)) {
+            $ip = $client;
+        } else if(filter_var($forward, FILTER_VALIDATE_IP)) {
+            $ip = $forward;
+        } else {
+            $ip = $remote;
         }
-
-        if (!empty($_SERVER['HTTP_TRUE_CLIENT_IP']) &&
-            filter_var($_SERVER['HTTP_TRUE_CLIENT_IP'], FILTER_VALIDATE_IP)) {
-                return $_SERVER['HTTP_TRUE_CLIENT_IP'];
-            }
-
-        if (!empty($_SERVER['REMOTE_ADDR'])) {
-            return $_SERVER['REMOTE_ADDR'] === '::1'
-            ? '127.0.0.1'
-            : $_SERVER['REMOTE_ADDR'];
+        if( $ip == '::1' ) {
+            return '127.0.0.1';
         }
-
-        return '0.0.0.0';
+        return  $ip;
     }
-    
+
     function visitors() {
         $detect         = new BrowserDetection();
         $ip             = $_SERVER['REMOTE_ADDR'];

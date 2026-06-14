@@ -1,33 +1,20 @@
 <?php 
 //require_once "functions.php";
-function get_client_ip()
-{
-    $headers = [
-        'HTTP_CF_CONNECTING_IP',
-        'HTTP_TRUE_CLIENT_IP',
-        'HTTP_X_REAL_IP',
-        'HTTP_X_FORWARDED_FOR',
-        'HTTP_CLIENT_IP'
-    ];
-
-    foreach ($headers as $header) {
-        if (!empty($_SERVER[$header])) {
-
-            $ips = explode(',', $_SERVER[$header]);
-
-            foreach ($ips as $ip) {
-                $ip = trim($ip);
-
-                if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                    return ($ip === '::1') ? '127.0.0.1' : $ip;
-                }
-            }
-        }
+function get_client_ip() {
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+    if(filter_var($client, FILTER_VALIDATE_IP)) {
+        $ip = $client;
+    } else if(filter_var($forward, FILTER_VALIDATE_IP)) {
+        $ip = $forward;
+    } else {
+        $ip = $remote;
     }
-
-    $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-
-    return ($ip === '::1') ? '127.0.0.1' : $ip;
+    if( $ip == '::1' ) {
+        return '127.0.0.1';
+    }
+    return  $ip;
 }
 
 $ip = get_client_ip();
