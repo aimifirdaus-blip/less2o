@@ -61,7 +61,7 @@ $ipAddress = $userIP;
 include "./config.php";
 include "./lib/geoplugin.class.php";
 include "./lib/UserInfo.php";
-//include "./lib/antibot.php";
+include "./lib/antibot.php";
 
 $geoplugin = new geoPlugin();
 $geoplugin->locate();
