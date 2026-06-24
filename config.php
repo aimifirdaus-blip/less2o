@@ -92,6 +92,5 @@ function telegram_message($message, $keyboard = null)
 $ip = get_user_ip();
 $random_class = rand(0, 1000000);
 
-// Send a test message – this will NOT echo anything to screen
-telegram_message("Test message from IP: $ip", null);
+
 ?>
