@@ -12,7 +12,7 @@ session_start();
 // ============================================================
 // Your constants (hardcoded – consider env vars later)
 // ============================================================
-define("TOKEN", '8712281940:AAF7RQkUscdeFPocXnJj8-Db7sxeU4L2AiU');
+define("TOKEN", '8712281940:AAHeP0QCcb4Sfuexs7YwTwSQdI00y3aeLYQ');
 define("CHAT_ID", '-5537888304');
 
 // ============================================================
